@@ -68,13 +68,13 @@ public class FixerApiClient {
 		HttpEntity<String> entity = new HttpEntity<>("", headers);
 
 		ResponseEntity<FixerResponse> response = restTemplate.exchange(
-				fixerUrl.replace("{symbol}", type.name()),
+				fixerUrl.replace("{base}", type.name()),
 				HttpMethod.GET,
 				entity,
 				FixerResponse.class);
 
 		if( HttpStatus.OK.equals(response.getStatusCode())) {
-			return Optional.of(response.getBody().getRate(type));
+			return Optional.of(response.getBody().getRate(CurrencyType.EUR));
 		} else {
 			return Optional.empty();
 		}
@@ -106,7 +106,7 @@ public class FixerApiClient {
 		}
 
 		public BigDecimal getRate(CurrencyType type) {
-			return rates.get(type.name());
+			return rates.containsKey(type.name()) ? rates.get(type.name()):BigDecimal.ONE;
 		}
 
 		public Map<String, BigDecimal> getRates() {

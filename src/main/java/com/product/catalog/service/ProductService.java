@@ -38,7 +38,7 @@ public class ProductService {
 			throw new ConflictException();
 		}
 
-		if(currencyService.isNotEuroCurrency(product.getPrice())) {
+		if(product.getPrice() != null && currencyService.isNotEuroCurrency(product.getPrice())) {
 			currencyService
 					.convertPriceToEuro(product.getPrice())
 					.ifPresent(product::setPrice);
